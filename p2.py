@@ -37,6 +37,7 @@ def pltAllDF(df):
 if __name__ == '__main__':
     df = createDF()
     df = indexDF(df)
+
     printDF(df)
     # pltDF(df)
     #pltAllDF(df)
