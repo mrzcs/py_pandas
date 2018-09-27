@@ -1,4 +1,4 @@
-# basic IO of pandas
+# IO basics
 
 import pandas as pd
 
@@ -25,10 +25,14 @@ df.to_csv('newcsv3.csv')
 # export without header
 df.to_csv('newcsv4.csv', header=False)
 
-# import source not having header
+# import headless file,  giving the column names of Date and House_Prices
 df = pd.read_csv('newcsv4.csv', names=['Date', 'House_Prices'], index_col=0)
 print(df.head())
 
 df.to_html('example.html')
 
-df.rename('newcsv4.csv', name)
+# rename just one of the columns
+df = pd.read_csv('newcsv4.csv', names = ['Date','House_Price'])
+print(df.head())
+df.rename(columns={'House_Price':'Prices'}, inplace=True)
+print(df.head())
