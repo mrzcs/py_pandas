@@ -1,7 +1,10 @@
-# Pickling
+# Percent Change and Correlation Tables
 import pandas as pd
 import quandl
 import pickle
+import matplotlib.pyplot as plt
+from matplotlib import style
+style.use('fivethirtyeight')
 
 api_key = open('../quandlapikey.txt', 'r').read()
 
@@ -29,13 +32,49 @@ def grabInitialStateData():
     pickle.dump(main_df, pickle_out)
     pickle_out.close()
 
-def readStateData():
-    pickle_in = open('fiddy_states.pickle','rb')
-    HPI_data = pickle.load(pickle_in)
-    print(HPI_data)
+def readStateData(file_name):
+    #pickle_in = open('fiddy_states.pickle','rb')
+    #HPI_data = pickle.load(pickle_in)
+    HPI_data = pd.read_pickle(file_name)
+    return HPI_data
 
-#grabInitialStateData()
-#readStateData()
-HPI_data = pd.read_pickle('fiddy_states.pickle')
-print(HPI_data.head())
+def calcPct(HPI_data):
+    HPI_data_pct = HPI_data.pct_change()
+    pickle_out = open('fiddy_states2.pickle','wb')
+    pickle.dump(HPI_data_pct, pickle_out)
+    pickle_out.close()
 
+def modifyStateData(HPI_data):
+    states = list(HPI_data.columns.values)
+    #main_df = pd.DataFrame()
+    print(states)
+    for abbv in states:
+        HPI_data[abbv] = (HPI_data[abbv]-HPI_data[abbv][0]) / HPI_data[abbv][0] * 100.0
+            
+    pickle_out = open('fiddy_states3.pickle','wb')
+    pickle.dump(HPI_data, pickle_out)
+    pickle_out.close()
+
+file_name1 = 'fiddy_states.pickle'
+file_name2 = 'fiddy_states2.pickle'
+file_name3 = 'fiddy_states3.pickle'
+
+HPI_data = readStateData(file_name1)
+print(HPI_data.head(1))
+
+#print(HPI_data.head())
+#HPI_data['TX2'] = HPI_data['TX'] * 2
+#print(HPI_data[['TX', 'TX2']].head())
+calcPct(HPI_data)
+
+HPI_data = readStateData(file_name2)
+modifyStateData(HPI_data)
+HPI_data = readStateData(file_name3) 
+print(HPI_data.head(5))
+
+#plotting
+""" 
+HPI_data.plot()
+plt.legend().remove()
+plt.show()
+ """
