@@ -3,7 +3,8 @@ import pandas as pd
 import quandl
 import pickle
 
-api_key = open('../quandlapikey.txt', 'r').read()
+api_key = open('../quandlapikey.txt', 'r').read().rstrip('\n')
+
 
 def stateList():
     fiddyStates = pd.read_html('https://simple.wikipedia.org/wiki/List_of_U.S._states')
@@ -34,5 +35,5 @@ def readStateData():
     HPI_data = pickle.load(pickle_in)
     print(HPI_data)
 
-#grabInitialStateData()
+grabInitialStateData()
 readStateData()
